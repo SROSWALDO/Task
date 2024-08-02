@@ -1,58 +1,77 @@
-import React, { useState } from "react";
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from "react";
+import { ConfigProvider, Modal } from "antd";
+import useStore from "./Store";
 
-export default function Create() {
+export default function Create({ isModalOpen, handleCancel, handleSave }) {
+  const { formData, setFormData, resetFormData, editingTask, setEditingTask } = useStore();
 
-  const navigate = useNavigate()
-
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-  });
+  useEffect(() => {
+    if (editingTask) {
+      setFormData({
+        title: editingTask.title,
+        description: editingTask.description,
+      });
+    } else {
+      resetFormData();
+    }
+  }, [editingTask, setFormData, resetFormData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:3001/task", formData);
-    } catch (error) {
-      console.log(error);
-    }
-    navigate('/')
-    
+    handleSave(formData, editingTask ? editingTask.id : null);
+    setEditingTask(null);
+    resetFormData();
+    handleCancel();
   };
 
-  
-
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="flex justify-center ">
-        <input
-          value={formData.title}
-          onChange={handleChange}
-          name="title"
-          className=" outline-none bg-black/80 w-[600px] p-4 rounded-2xl "
-          type="text"
-        />
-        <input
-          value={formData.description}
-          onChange={handleChange}
-          type="text"
-          className=" outline-none bg-black/80 w-[600px] p-4 rounded-2xl "
-          name="description"
-        />
-        <button
-          className="bg-blue-800 w-[100px] rounded-2xl ml-4 "
-          type="submit"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
+    <ConfigProvider>
+      <Modal
+        width={900}
+        open={isModalOpen}
+        onCancel={() => {
+          resetFormData();
+          setEditingTask(null);
+          handleCancel();
+        }}
+        footer={null}
+      >
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "400px" }}>
+          <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "500px" }}>
+            <div style={{ marginBottom: "16px" }}>
+              <input
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Title"
+                type="text"
+                style={{ width: "100%", padding: "8px", backgroundColor: "gray" }}
+              />
+            </div>
+            <div style={{ marginBottom: "16px" }}>
+              <input
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Description"
+                type="text"
+                style={{ width: "100%", padding: "8px", backgroundColor: "gray" }}
+              />
+            </div>
+            <button
+              type="submit"
+              style={{ width: "100%", padding: "10px", backgroundColor: "#1890ff", color: "#fff", border: "none", borderRadius: "4px" }}
+            >
+              {editingTask ? "Update" : "Submit"}
+            </button>
+          </form>
+        </div>
+      </Modal>
+    </ConfigProvider>
   );
 }
