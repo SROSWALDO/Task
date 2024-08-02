@@ -11,9 +11,11 @@ export default function Create({ isModalOpen, handleCancel, handleSave }) {
         title: editingTask.title,
         description: editingTask.description,
       });
+      
     } else {
       resetFormData();
     }
+    
   }, [editingTask, setFormData, resetFormData]);
 
   const handleChange = (e) => {
@@ -27,6 +29,7 @@ export default function Create({ isModalOpen, handleCancel, handleSave }) {
     setEditingTask(null);
     resetFormData();
     handleCancel();
+    window.location.reload()
   };
 
   return (
