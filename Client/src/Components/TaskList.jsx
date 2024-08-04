@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pagination } from 'antd';
 
 export default function TaskList({ tasks, deleteTask, setEditingTask }) {
@@ -45,12 +45,14 @@ export default function TaskList({ tasks, deleteTask, setEditingTask }) {
           );
         })}
       </div>
-      <Pagination
-        current={currentPage}
-        pageSize={pageSize}
-        total={tasks.length}
-        onChange={handlePageChange}
-      />
+      {tasks.length > pageSize && ( // Mostrar la paginación solo si hay 7 o más tareas
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={tasks.length}
+          onChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }
