@@ -2,10 +2,9 @@ const { Task } = require("../db");
 
 const createTask = async (taskData) => {
     try {
-        const { title, description } = taskData;
+        const { description } = taskData;
 
         const newTask = await Task.create({
-            title,
             description,
         })
 

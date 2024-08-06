@@ -32,11 +32,14 @@ export default function TaskList({
     setCurrentPage(page);
   };
 
+  const completedTasksCount = tasks.filter(task => task.completed).length;
+  const pendingTaskCount = tasks.filter(task => task.completed === false ).length
+
   return (
-    <div className="m-auto flex flex-col items-center shadow-xl pt-12 w-[800px] h-[550px]">
+    <div className="m-auto flex flex-col items-center relative shadow-xl pt-12 w-[800px] h-[550px]">
       <div>
         {currentTasks.map((task) => {
-          if (!task || !task.title) {
+          if (!task || !task.description) {
             console.log("Invalid task:", task); // Verifica si task es inválido
             return null; // O puedes manejarlo de otra manera si es necesario
           }
@@ -56,11 +59,11 @@ export default function TaskList({
                   />
                 </div>
                 <div className="task-body">
-                  <p className={task.completed ? ' line-through' : '' } >
+                  <p className={task.completed ? ' line-through text-slate-500 ' : '' } >
                     {task.description.charAt(0).toUpperCase() +
                       task.description.slice(1)}
                   </p>
-                  <p>{task.completed ? 'Completed' : 'Pending'}</p>
+                  
                 </div>
               </div>
               <div className="buttons items-center">
@@ -81,7 +84,11 @@ export default function TaskList({
           );
         })}
       </div>
-      <div className="w-[700px] px-5">Tasks: {tasks.length}</div>
+      <div className="w-[700px] justify-center mb-3 flex px-5">
+        <p className="mr-2" >Tasks: {tasks.length}</p>
+        <p className="mr-2">Completed: {completedTasksCount} </p>
+        <p className="mr-2">Pending: {pendingTaskCount} </p>
+      </div>
       {tasks.length > pageSize && (
         <Pagination
           current={currentPage}

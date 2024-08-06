@@ -6,7 +6,7 @@ const editTask = async  (id, newTaskData) => {
         const taskData = await Task.findOne({ where: { id } });
 
         if(taskData) {
-            taskData.title = newTaskData.title;
+            
             taskData.description = newTaskData.description;
 
             await taskData.save();

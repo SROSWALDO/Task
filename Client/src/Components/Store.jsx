@@ -8,7 +8,7 @@ const useStore = create(set => ({
 
   // Estados globales para formData
   formData: {
-    title: "",
+    
     description: "",
   },
   setFormData: (formData) => set({ formData }),

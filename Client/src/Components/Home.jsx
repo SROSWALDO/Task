@@ -16,6 +16,7 @@ function Home() {
       const response = await axios.get(URL);
       const data = response.data;
       setTasks(data); // Asegúrate de que `setTasks` actualiza correctamente el estado
+      console.log(tasks);
     } catch (error) {
       console.log(error);
     }

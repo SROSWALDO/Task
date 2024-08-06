@@ -8,7 +8,7 @@ export default function Create({ isModalOpen, handleCancel, handleSave }) {
   useEffect(() => {
     if (editingTask) {
       setFormData({
-        title: editingTask.title,
+        
         description: editingTask.description,
       });
       
@@ -47,14 +47,14 @@ export default function Create({ isModalOpen, handleCancel, handleSave }) {
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "400px" }}>
           <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "500px" }}>
             <div style={{ marginBottom: "16px" }}>
-              <input
+              {/* <input
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="Title"
                 type="text"
                 style={{ width: "100%", padding: "8px", backgroundColor: "gray" }}
-              />
+              /> */}
             </div>
             <div style={{ marginBottom: "16px" }}>
               <input
