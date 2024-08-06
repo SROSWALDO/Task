@@ -14,7 +14,7 @@ function Home() {
   const fetchData = async () => {
     try {
       const response = await axios.get(URL);
-      const { data } = response;
+      const data = response.data;
       setTasks(data); // Asegúrate de que `setTasks` actualiza correctamente el estado
     } catch (error) {
       console.log(error);
@@ -47,13 +47,25 @@ function Home() {
       console.log(error);
     }
   };
-  
-  
-  
 
   const handleCreate = () => {
     setEditingTask(null);
     setIsModalOpen(true);
+  };
+
+  const handleCompleted = async (id) => {
+    try {
+      // Encuentra la tarea que se está marcando
+      const taskToUpdate = tasks.find(task => task.id === id);  //Utiliza el método find para buscar la tarea en el array de tasks que coincide con el id proporcionado. Esto devuelve el objeto de la tarea que se va a actualizar.
+      if (taskToUpdate) { //si existe
+        // Alterna el estado `completed`
+        const updatedTask = { ...taskToUpdate, completed: !taskToUpdate.completed };
+        await axios.put(`${URL}/${id}`, updatedTask); // Actualiza la tarea en el backend
+        setTasks(tasks.map(task => (task.id === id ? updatedTask : task))); //recorre cada tarea y reemplaza la tarea con el id coincidente por updatedTask. Así, la tarea en el estado local refleja el nuevo estado completed.
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -69,7 +81,7 @@ function Home() {
   }, [editingTask]);
 
   return (
-    <div className="w-full h-[100vh] ">
+    <div className="w-full h-[100vh]">
       <Navbar handleCreate={handleCreate} />
       <div className="m-auto text-center p-5">
         <h1 className="text-xl">App Todo</h1>
@@ -77,9 +89,9 @@ function Home() {
       <TaskList
         tasks={tasks} // Pasa el estado actualizado de tasks a TaskList
         deleteTask={deleteTask}
-        setEditingTask={(task) => {
-          setEditingTask(task);
-        }}
+        setEditingTask={setEditingTask}
+        handleCreate={handleCreate}
+        handleCompleted={handleCompleted} // Pasa la función handleCompleted a TaskList
       />
       <Create
         isModalOpen={isModalOpen}
