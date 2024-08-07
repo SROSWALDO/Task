@@ -9,7 +9,7 @@ console.log("PORT " + PORT );
 
 const startServer = async () => {
     try {
-        await connection.sync({ force: true });
+        await connection.sync({ force: false });
         server.listen(PORT, () => console.log(`Servidor levantado en el puerto: ${PORT}`));
     } catch (error) {
         console.log("El servidor no se pudo iniciar", error.message);

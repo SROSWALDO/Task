@@ -26,3 +26,11 @@
   top: 2px;
   left: 6px;
 }
+
+.dark-mode .custom-pagination .ant-pagination-item-link {
+  color: #ffffff; /* Color para modo oscuro */
+}
+
+.dark-mode .custom-pagination .ant-pagination-item-link:hover {
+  color: #e5e7eb; /* Color cuando se pasa el ratón sobre la flecha en modo oscuro */
+}

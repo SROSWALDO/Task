@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pagination } from "antd";
 import trash from "../assets/trash.svg";
 import edit from "../assets/edit.svg";
-import './TaskList.css';
+import "./TaskList.css";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function TaskList({
   tasks,
   deleteTask,
   setEditingTask,
   handleCreate,
-  handleCompleted // Asegúrate de recibir handleCompleted como prop
+  handleCompleted, // Asegúrate de recibir handleCompleted como prop
 }) {
   // Asegúrate de que tasks es un array
   if (!Array.isArray(tasks)) {
@@ -32,50 +33,69 @@ export default function TaskList({
     setCurrentPage(page);
   };
 
-  const completedTasksCount = tasks.filter(task => task.completed).length;
-  const pendingTaskCount = tasks.filter(task => task.completed === false ).length
+  const completedTasksCount = tasks.filter((task) => task.completed).length;
+  const pendingTaskCount = tasks.filter(
+    (task) => task.completed === false
+  ).length;
+
+  const allTaskCompleted = () => {
+    if (pendingTaskCount === 0 && tasks.length > 0) {
+      return toast.success("Congratulations! all tasks completed!");
+    }
+  };
+
+  useEffect(() => {
+    allTaskCompleted();
+  }, [tasks]);
 
   return (
-    <div className="m-auto flex flex-col items-center relative shadow-xl pt-12 w-[800px] h-[550px]">
+    <div className="shadow-custom m-auto flex flex-col items-center relative w-[800px] mt-2 p-1 h-[570px] bg-white rounded-lg font-sans dark:bg-[#242424] dark:shadow dark:shadow-gray-600 ">
       <div>
         {currentTasks.map((task) => {
           if (!task || !task.description) {
-            console.log("Invalid task:", task); // Verifica si task es inválido
-            return null; // O puedes manejarlo de otra manera si es necesario
+            console.log("Invalid task:", task);
+            return null;
           }
           return (
             <div
               key={task.id}
-              className="flex justify-between shadow-md px-5 m-2 bg-white items-center w-[700px]"
+              className={
+                task.completed
+                  ? "shadow-md flex justify-between p-3 my-3  rounded-lg w-[700px] bg-green-200 dark:bg-cyan-300 "
+                  : "bg-slate-100 shadow-md flex justify-between p-3 my-3 rounded-lg w-[700px] dark:bg-[#414141] dark:text-white "
+              }
             >
-              <div className="body-task flex items-center">
+              <div className="flex items-center">
                 <div className="checkbox-container mr-5">
                   <input
                     className="custom-checkbox"
                     type="checkbox"
                     id={`checkbox-${task.id}`}
                     checked={task.completed}
-                    onChange={() => handleCompleted(task.id)} // Llama a handleCompleted al hacer clic
+                    onChange={() => handleCompleted(task.id)}
                   />
                 </div>
                 <div className="task-body">
-                  <p className={task.completed ? ' line-through text-slate-500 ' : '' } >
+                  <p
+                    className={
+                      task.completed ? "line-through text-gray-500" : ""
+                    }
+                  >
                     {task.description.charAt(0).toUpperCase() +
                       task.description.slice(1)}
                   </p>
-                  
                 </div>
               </div>
-              <div className="buttons items-center">
+              <div className="buttons flex items-center">
                 <button
                   onClick={() => setEditingTask(task)}
-                  className="bg-blue-500 rounded-md p-1 text-white mr-3"
+                  className="bg-blue-500 rounded-md p-1 text-white mr-3 hover:bg-blue-600 "
                 >
                   <img src={edit} alt="" />
                 </button>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  className="bg-red-500 rounded-md p-1 text-white"
+                  className="bg-red-500 rounded-md p-1 text-white hover:bg-red-600 "
                 >
                   <img src={trash} alt="" />
                 </button>
@@ -84,13 +104,14 @@ export default function TaskList({
           );
         })}
       </div>
-      <div className="w-[700px] justify-center mb-3 flex px-5">
-        <p className="mr-2" >Tasks: {tasks.length}</p>
-        <p className="mr-2">Completed: {completedTasksCount} </p>
-        <p className="mr-2">Pending: {pendingTaskCount} </p>
+      <div className="w-[700px] justify-center mb-3 flex px-5 dark:text-white ">
+        <p className="mr-2">Tasks: {tasks.length}</p>
+        <p className="mr-2">Completed: {completedTasksCount}</p>
+        <p className="mr-2">Pending: {pendingTaskCount}</p>
       </div>
       {tasks.length > pageSize && (
         <Pagination
+          className="custom-pagination"
           current={currentPage}
           pageSize={pageSize}
           total={tasks.length}
@@ -98,9 +119,14 @@ export default function TaskList({
         />
       )}
       {tasks.length === 0 && (
-        <div>
-          <p>There are no tasks</p>
-          <button onClick={handleCreate}>Create task!</button>
+        <div className="text-center mt-10">
+          <p>No hay tareas</p>
+          <button
+            onClick={handleCreate}
+            className="bg-blue-500 text-white p-2 rounded-lg mt-3"
+          >
+            ¡Crear tarea!
+          </button>
         </div>
       )}
     </div>

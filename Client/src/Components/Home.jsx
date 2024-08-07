@@ -4,10 +4,30 @@ import TaskList from "./TaskList";
 import Navbar from "./Navbar";
 import Create from "./Create";
 import useStore from "./Store";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
   const { tasks, setTasks, editingTask, setEditingTask } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [theme, setTheme] = useState("light")
+
+  const handleChangeTheme = () => {
+    console.log(`Changing theme to: ${theme === 'light' ? 'dark' : 'light'}`);
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
+  }
+
+  useEffect(() => {
+    const htmlElement = document.querySelector('html');
+    if (theme === 'dark') {
+      htmlElement.classList.add('dark');
+      console.log('Added dark class to html');
+    } else {
+      htmlElement.classList.remove('dark');
+      console.log('Removed dark class from html');
+    }
+  }, [theme]);
 
   const URL = "http://localhost:3001/task";
 
@@ -22,13 +42,24 @@ function Home() {
     }
   };
 
+  const showDeleteToast = (taskid) => {
+    toast.info(`Task ${taskid} delete successfully `)
+
+  }
+
   const deleteTask = async (id) => {
     try {
       await axios.delete(`${URL}/${id}`);
       setTasks(tasks.filter(task => task.id !== id)); // Filtra la tarea eliminada
+      showDeleteToast(id)
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const showSuccessToast = (task) => {
+    console.log('showSuccessToast called');
+    toast.success(`Task ${task} created successfully`);
   };
 
   const handleSave = async (taskData, taskId) => {
@@ -38,10 +69,12 @@ function Home() {
         response = await axios.put(`${URL}/${taskId}`, taskData);
         console.log('Edited Task Response:', response.data);
         setTasks(tasks.map(task => (task.id === taskId ? response.data : task))); // Actualiza la tarea editada
+        window.location.reload()
       } else {
         response = await axios.post(URL, taskData);
         console.log('Created Task Response:', response.data);
         setTasks([...tasks, response.data]); // Agrega la nueva tarea
+        showSuccessToast(response.data.description)
       }
       console.log('Updated Tasks:', tasks);
     } catch (error) {
@@ -82,17 +115,18 @@ function Home() {
   }, [editingTask]);
 
   return (
-    <div className="w-full h-[100vh]">
-      <Navbar handleCreate={handleCreate} />
-      <div className="m-auto text-center p-5">
-        <h1 className="text-xl">App Todo</h1>
+    <div className="w-full h-[100vh] bg-gray-100 text-gray-900 font-sans dark:bg-[#242424] ">
+      <Navbar handleCreate={handleCreate} handleChangeTheme={handleChangeTheme} />
+      <div>
+      <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-md p-2 flex justify-center m-auto mt-2 " onClick={handleCreate} >Create Task!</button>
       </div>
       <TaskList
-        tasks={tasks} // Pasa el estado actualizado de tasks a TaskList
+        tasks={tasks}
+        setTasks={setTasks}
         deleteTask={deleteTask}
         setEditingTask={setEditingTask}
         handleCreate={handleCreate}
-        handleCompleted={handleCompleted} // Pasa la función handleCompleted a TaskList
+        handleCompleted={handleCompleted}
       />
       <Create
         isModalOpen={isModalOpen}
@@ -102,8 +136,11 @@ function Home() {
         }}
         handleSave={handleSave}
       />
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </div>
+    
   );
+  
 }
 
 export default Home;

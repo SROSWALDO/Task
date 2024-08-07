@@ -3,19 +3,17 @@ import { ConfigProvider, Modal } from "antd";
 import useStore from "./Store";
 
 export default function Create({ isModalOpen, handleCancel, handleSave }) {
-  const { formData, setFormData, resetFormData, editingTask, setEditingTask } = useStore();
+  const { formData, setFormData, resetFormData, editingTask, setEditingTask } =
+    useStore();
 
   useEffect(() => {
     if (editingTask) {
       setFormData({
-        
         description: editingTask.description,
       });
-      
     } else {
       resetFormData();
     }
-    
   }, [editingTask, setFormData, resetFormData]);
 
   const handleChange = (e) => {
@@ -29,13 +27,14 @@ export default function Create({ isModalOpen, handleCancel, handleSave }) {
     setEditingTask(null);
     resetFormData();
     handleCancel();
-    window.location.reload()
   };
 
   return (
     <ConfigProvider>
       <Modal
-        width={900}
+        className="dark:bg-gray-700"
+        centered
+        width={800}
         open={isModalOpen}
         onCancel={() => {
           resetFormData();
@@ -44,33 +43,23 @@ export default function Create({ isModalOpen, handleCancel, handleSave }) {
         }}
         footer={null}
       >
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "400px" }}>
-          <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "500px" }}>
-            <div style={{ marginBottom: "16px" }}>
-              {/* <input
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="Title"
-                type="text"
-                style={{ width: "100%", padding: "8px", backgroundColor: "gray" }}
-              /> */}
-            </div>
-            <div style={{ marginBottom: "16px" }}>
+        <div className="flex justify-center items-center  h-[250px] dark:bg-[#242424]">
+          <form onSubmit={handleSubmit} className="w-full max-w-[500px]  ">
+            <div className="mb-4">
               <input
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                placeholder="Description"
+                placeholder="Descripción"
                 type="text"
-                style={{ width: "100%", padding: "8px", backgroundColor: "gray" }}
+                className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
             <button
               type="submit"
-              style={{ width: "100%", padding: "10px", backgroundColor: "#1890ff", color: "#fff", border: "none", borderRadius: "4px" }}
+              className="w-full p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
             >
-              {editingTask ? "Update" : "Submit"}
+              {editingTask ? "Actualizar" : "Enviar"}
             </button>
           </form>
         </div>
