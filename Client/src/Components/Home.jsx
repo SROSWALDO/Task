@@ -14,9 +14,16 @@ function Home() {
   const [theme, setTheme] = useState("light")
 
   const handleChangeTheme = () => {
-    console.log(`Changing theme to: ${theme === 'light' ? 'dark' : 'light'}`);
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
   }
+  
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light'; // Por defecto es 'light'
+    setTheme(savedTheme);
+  }, []);
+  
 
   useEffect(() => {
     const htmlElement = document.querySelector('html');

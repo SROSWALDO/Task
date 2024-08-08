@@ -23,7 +23,7 @@ export default function TaskList({
   const pageSize = 7;
 
   // Calcular las tareas para la página actual
-  const startIndex = (currentPage - 1) * pageSize;
+  const startIndex = (currentPage - 1) * pageSize; //7
   const endIndex = startIndex + pageSize;
   const currentTasks = tasks.slice(startIndex, endIndex);
 
@@ -46,6 +46,19 @@ export default function TaskList({
 
   useEffect(() => {
     allTaskCompleted();
+
+    // Calcula el número de páginas
+    const totalPages = Math.ceil(tasks.length / pageSize);
+
+    // Si hay menos de 7 tareas, establece la página actual en 1
+    if (tasks.length <= pageSize && currentPage !== 1) { //Si hay 7 o menos tareas y la página actual no es la 1
+      setCurrentPage(1);
+    }
+
+    // Si la página actual es mayor al total de páginas, vuelve a la última página disponible
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
   }, [tasks]);
 
   return (

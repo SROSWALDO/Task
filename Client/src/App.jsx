@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react'
 import './App.css'
-import axios from 'axios';
-import TaskList from './Components/TaskList';
-import Navbar from './Components/Navbar';
 import { Route, Routes } from 'react-router-dom';
 import Home from './Components/Home';
 import Create from './Components/Create';
+import AboutMe from './Components/AboutMe';
 
 
 
@@ -15,11 +12,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/create' element={<Create />} />
-
-        
+        <Route path='/about' element={<AboutMe />} />
       </Routes>
     </>
   )
 }
 
-export default App
+export default App;
