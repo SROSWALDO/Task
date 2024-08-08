@@ -12,7 +12,8 @@ const startServer = async () => {
         await connection.sync({ force: false });
         server.listen(PORT, () => console.log(`Servidor levantado en el puerto: ${PORT}`));
     } catch (error) {
-        console.log("El servidor no se pudo iniciar", error.message);
+        console.log("El servidor no se pudo iniciar", error.message, error.stack);
+
         
     }
 };
