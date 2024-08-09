@@ -64,9 +64,9 @@ function Home() {
     }
   };
 
-  const showSuccessToast = (task) => {
+  const showSuccessToast = () => {
     console.log('showSuccessToast called');
-    toast.success(`Task ${task} created successfully`);
+    toast.success(`Task created successfully`);
   };
 
   const handleSave = async (taskData, taskId) => {

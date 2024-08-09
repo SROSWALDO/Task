@@ -13,7 +13,7 @@ export default function AboutMe() {
         <div className="">
           <div class="flex items-center gap-4 mt-32">
             <div class="social-button">
-              <a href="">
+              <a href="tel:+524426665226">
                 <button class="relative w-12 h-12 rounded-full group">
                   <div class="floater w-full h-full absolute top-0 left-0 bg-green-400 rounded-full duration-300 group-hover:-top-8 group-hover:shadow-2xl"></div>
                   <div class="icon relative z-10 w-full h-full flex items-center justify-center border-2 border-green-400  rounded-full">
