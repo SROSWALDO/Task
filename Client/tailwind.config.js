@@ -16,8 +16,33 @@ export default {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'], // Usa el nombre de la fuente importada de Google Fonts
       },
+      borderWidth: {
+        'gradient': '2px',
+      },
+      borderColor: {
+        'gradient-dark': 'linear-gradient(to right, #ec4899, #8b5cf6, #3b82f6)',
+      },
       
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities, e, theme, variants }) {
+      const borderGradients = theme('borderColor');
+      const borderGradientUtilities = Object.keys(borderGradients).reduce((acc, key) => {
+        acc[`.${e(`border-gradient-${key}`)}::before`] = {
+          content: '""',
+          display: 'block',
+          position: 'absolute',
+          inset: 0,
+          zIndex: -1,
+          border: '2px solid transparent',
+          borderRadius: 'inherit',
+          background: `linear-gradient(${borderGradients[key]})`,
+        };
+        return acc;
+      }, {});
+
+      addUtilities(borderGradientUtilities, variants('borderColor'));
+    },
+  ],
 }

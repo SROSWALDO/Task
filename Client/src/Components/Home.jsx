@@ -11,30 +11,30 @@ function Home() {
   const { tasks, setTasks, editingTask, setEditingTask } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [theme, setTheme] = useState("light")
+  // const [theme, setTheme] = useState("light")
 
-  const handleChangeTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  }
+  // const handleChangeTheme = () => {
+  //   const newTheme = theme === 'light' ? 'dark' : 'light';
+  //   setTheme(newTheme);
+  //   localStorage.setItem('theme', newTheme);
+  // }
   
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light'; // Por defecto es 'light'
-    setTheme(savedTheme);
-  }, []);
+  // useEffect(() => {
+  //   const savedTheme = localStorage.getItem('theme') || 'light'; // Por defecto es 'light'
+  //   setTheme(savedTheme);
+  // }, []);
   
 
-  useEffect(() => {
-    const htmlElement = document.querySelector('html');
-    if (theme === 'dark') {
-      htmlElement.classList.add('dark');
-      console.log('Added dark class to html');
-    } else {
-      htmlElement.classList.remove('dark');
-      console.log('Removed dark class from html');
-    }
-  }, [theme]);
+  // useEffect(() => {
+  //   const htmlElement = document.querySelector('html');
+  //   if (theme === 'dark') {
+  //     htmlElement.classList.add('dark');
+  //     console.log('Added dark class to html');
+  //   } else {
+  //     htmlElement.classList.remove('dark');
+  //     console.log('Removed dark class from html');
+  //   }
+  // }, [theme]);
 
   const URL = "http://localhost:3001/task";
 
@@ -122,10 +122,16 @@ function Home() {
   }, [editingTask]);
 
   return (
-    <div className="w-full h-[100vh] bg-gray-100 text-gray-900 font-sans dark:bg-[#242424] ">
-      <Navbar handleCreate={handleCreate} handleChangeTheme={handleChangeTheme} />
+    <div className="w-full h-[100vh] bg-gray-100 text-gray-900 font-sans dark:bg-[#000000] ">
+      <Navbar handleCreate={handleCreate}  />
       <div>
-      <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-md p-2 flex justify-center m-auto mt-2 " onClick={handleCreate} >Create Task!</button>
+      <button class="relative flex justify-center m-auto mt-4 h-12 dark:active:scale-95 transistion overflow-hidden rounded-lg p-[1px] focus:outline-none" onClick={handleCreate} >
+      <span class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#e7029a_0%,#f472b6_50%,#bd5fff_100%)]"></span>
+      <span class="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-blue-600 dark:bg-slate-950 px-7 text-sm font-medium text-white backdrop-blur-3xl gap-2 undefined">
+      Create Task!
+      </span>
+        
+        </button>
       </div>
       <TaskList
         tasks={tasks}

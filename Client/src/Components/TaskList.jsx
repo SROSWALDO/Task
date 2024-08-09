@@ -56,14 +56,14 @@ export default function TaskList({
     }
 
     // Si la página actual es mayor al total de páginas, vuelve a la última página disponible
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
+    
   }, [tasks]);
 
   return (
-    <div className="shadow-custom m-auto flex flex-col items-center relative w-[800px] mt-2 p-1 h-[570px] bg-white rounded-lg font-sans dark:bg-[#242424] dark:shadow dark:shadow-gray-600 ">
-      <div>
+    <div class="relative flex w-[900px] m-auto h-[560px] mt-5 shadow-custom  transistion overflow-hidden rounded-lg p-[1px] focus:outline-none">
+       <span class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#e7029a_0%,#f472b6_50%,#bd5fff_100%)]"></span>
+              <span class=" h-full w-full cursor-pointer  items-center justify-center m-auto rounded-lg   dark:bg-black px-7 text-sm font-medium dark:text-white backdrop-blur-3xl gap-2 undefined">
+              <div className="ml-[72px]" >
         {currentTasks.map((task) => {
           if (!task || !task.description) {
             console.log("Invalid task:", task);
@@ -75,7 +75,7 @@ export default function TaskList({
               className={
                 task.completed
                   ? "shadow-md flex justify-between p-3 my-3  rounded-lg w-[700px] bg-green-200 dark:bg-cyan-300 "
-                  : "bg-slate-100 shadow-md flex justify-between p-3 my-3 rounded-lg w-[700px] dark:bg-[#414141] dark:text-white "
+                  : "bg-slate-100 shadow-md flex justify-between p-3 my-3 rounded-lg w-[700px] dark:bg-[#020617]  dark:text-white "
               }
             >
               <div className="flex items-center">
@@ -117,14 +117,14 @@ export default function TaskList({
           );
         })}
       </div>
-      <div className="w-[700px] justify-center mb-3 flex px-5 dark:text-white ">
+      <div className="w-[700px] justify-center mb-3 ml-10 flex px-5 dark:text-white ">
         <p className="mr-2">Tasks: {tasks.length}</p>
         <p className="mr-2">Completed: {completedTasksCount}</p>
         <p className="mr-2">Pending: {pendingTaskCount}</p>
       </div>
       {tasks.length > pageSize && (
         <Pagination
-          className="custom-pagination"
+          className="custom-pagination ml-[320px] "
           current={currentPage}
           pageSize={pageSize}
           total={tasks.length}
@@ -142,6 +142,9 @@ export default function TaskList({
           </button>
         </div>
       )}
+
+      </span>
+      
     </div>
   );
 }
